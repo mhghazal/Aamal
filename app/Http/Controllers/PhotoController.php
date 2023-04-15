@@ -15,4 +15,9 @@ class PhotoController extends Basecontroller
     public function show()
     {
     }
+
+    public function test()
+    {
+        
+    }
 }
