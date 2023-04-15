@@ -27,5 +27,4 @@ Route::group([
 });
 Route::post('logadmin', [App\Http\Controllers\Authcontroller\Authentication::class, 'logadmin'])->middleware('AdminLogin');
 route::post('image', [App\Http\Controllers\PhotoController::class, 'image']);
-route::get('show/{id}', [App\Http\Controllers\PhotoController::class, 'show']);
-route::get('test', [App\Http\Controllers\PhotoController::class, 'test']);
+
