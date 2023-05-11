@@ -16,7 +16,3 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('ahmad', function () {
-    return "hello";
-});
-route::get('show', [App\Http\Controllers\PhotoController::class, 'show']);

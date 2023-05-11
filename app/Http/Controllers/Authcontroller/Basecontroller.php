@@ -23,6 +23,7 @@ class Basecontroller extends Controller
         $response = [
             'success' => false,
             'data' => $error,
+            'status' =>'404 Not Found'
         ];
         if (!empty($errormessage)) {
             $response['data'] = $errormessage;

@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Authcontroller\Authentication;
+use App\Http\Controllers\Authcontroller\AuthenticationAdmin;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -25,6 +26,40 @@ Route::group([
     Route::post('logout', [App\Http\Controllers\Authcontroller\Authentication::class, 'logout'])->middleware('auth:sanctum');
     Route::post('delete', [App\Http\Controllers\Authcontroller\Authentication::class, 'delete'])->middleware('auth:sanctum');
 });
-Route::post('logadmin', [App\Http\Controllers\Authcontroller\Authentication::class, 'logadmin'])->middleware('AdminLogin');
-route::post('image', [App\Http\Controllers\PhotoController::class, 'image']);
 
+Route::group([
+    'prefix' => 'Auth_admin'
+], function () {
+    Route::post('register', [App\Http\Controllers\Authcontroller\AuthenticationAdmin::class, 'register'])->name('register');
+    Route::post('login', [App\Http\Controllers\Authcontroller\AuthenticationAdmin::class, 'login'])->name('login');
+    Route::post('logout', [App\Http\Controllers\Authcontroller\AuthenticationAdmin::class, 'logout'])->middleware('auth:sanctum');
+    Route::post('delete', [App\Http\Controllers\Authcontroller\AuthenticationAdmin::class, 'delete'])->middleware('auth:sanctum');
+});
+Route::middleware('auth:sanctum')->group(function () {
+    Route::resource('profile', App\Http\Controllers\ProfileController::class);
+    Route::post('update_photo_profile/{profile}', [App\Http\Controllers\ProfileController::class, 'update_photo_profile']);
+});
+Route::middleware('AdminLogin:sanctum')->group(function () {
+    Route::resource('section', App\Http\Controllers\SectionController::class);
+    Route::post('update_photo_section/{section}', [App\Http\Controllers\SectionController::class, 'update_photo_section']);
+});
+Route::middleware('AdminLogin:sanctum')->group(function () {
+    Route::resource('course', App\Http\Controllers\CourseController::class);
+    Route::Post('store_course/{value}', [App\Http\Controllers\CourseController::class, 'store_course']);
+    Route::post('update_photo_course/{course}', [App\Http\Controllers\CourseController::class, 'update_photo_course']);
+});
+Route::middleware('AdminLogin:sanctum')->group(function () {
+    Route::resource('game', App\Http\Controllers\GameController::class);
+    Route::post('store_game/{value}', [App\Http\Controllers\GameController::class, 'store_game']);
+    Route::post('update_photo_game/{game}', [App\Http\Controllers\GameController::class, 'update_photo_game']);
+});
+Route::middleware('AdminLogin:sanctum')->group(function () {
+    Route::resource('n_course', App\Http\Controllers\NCourseController::class);
+    Route::Post('store_n_course/{value}', [App\Http\Controllers\NCourseController::class, 'store_n_course']);
+    Route::post('update_photo_voice_n_Course/{n_course}', [App\Http\Controllers\NCourseController::class, 'update_photo_voice_n_Course']);
+});
+Route::middleware('AdminLogin:sanctum')->group(function () {
+    Route::resource('n_game', App\Http\Controllers\NGameController::class);
+    Route::Post('store_n_game/{value}', [App\Http\Controllers\NGameController::class, 'store_n_game']);
+    Route::post('update_photo_voice_n_Game/{n_course}', [App\Http\Controllers\NGameController::class, 'update_photo_voice_n_Game']);
+});
