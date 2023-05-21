@@ -25,6 +25,11 @@ Route::group([
     Route::post('register', [App\Http\Controllers\Authcontroller\Authentication::class, 'register'])->name('register');
     Route::post('logout', [App\Http\Controllers\Authcontroller\Authentication::class, 'logout'])->middleware('auth:sanctum');
     Route::post('delete', [App\Http\Controllers\Authcontroller\Authentication::class, 'delete'])->middleware('auth:sanctum');
+
+                         //////////////PassWord//////////
+    Route::post('forgot-password',[App\Http\Controllers\Authcontroller\Authentication::class,'ForgotPassword']);
+    Route::post('check-password',[App\Http\Controllers\Authcontroller\Authentication::class,'CodeCheck']);
+    Route::post('reset',[App\Http\Controllers\Authcontroller\Authentication::class,'Reset']);
 });
 
 Route::group([

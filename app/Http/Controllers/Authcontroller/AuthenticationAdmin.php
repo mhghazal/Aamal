@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\Authcontroller;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
-use App\Http\Controllers\Authcontroller\Basecontroller as Basecontroller;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Laravel\Passport\HasApiTokens;
+
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+
+use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\Authcontroller\Basecontroller as Basecontroller;
 
 class AuthenticationAdmin extends Basecontroller
 {
@@ -69,4 +70,7 @@ class AuthenticationAdmin extends Basecontroller
         //$user->profile->delete();
         return $this->sendresponse(['message' => 'Admin delete successfly'], 200);
     }
+
+
+
 }
