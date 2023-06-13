@@ -62,6 +62,7 @@ class CourseController extends BaseController
                 $mimetype = $file->getMimeType();
                 $course->section_id =  $section->id;
                 $course->name_course = $request->name_course;
+                $course->slug = $request->slug;
                 $course->photo_type = $mimetype;
                 $course->course_image = $filedata;
                 $course->save();

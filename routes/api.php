@@ -18,19 +18,6 @@ use App\Http\Controllers\Authcontroller\AuthenticationAdmin;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::group([
-    'prefix' => 'Auth'
-], function () {
-    Route::post('login', [App\Http\Controllers\Authcontroller\Authentication::class, 'login'])->name('login');
-    Route::post('register', [App\Http\Controllers\Authcontroller\Authentication::class, 'register'])->name('register');
-    Route::post('logout', [App\Http\Controllers\Authcontroller\Authentication::class, 'logout'])->middleware('auth:sanctum');
-    Route::post('delete', [App\Http\Controllers\Authcontroller\Authentication::class, 'delete'])->middleware('auth:sanctum');
-
-                         //////////////PassWord//////////
-    Route::post('forgot-password',[App\Http\Controllers\Authcontroller\Authentication::class,'ForgotPassword']);
-    Route::post('check-password',[App\Http\Controllers\Authcontroller\Authentication::class,'CodeCheck']);
-    Route::post('reset',[App\Http\Controllers\Authcontroller\Authentication::class,'Reset']);
-});
 
 Route::group([
     'prefix' => 'Auth_admin'
@@ -68,3 +55,10 @@ Route::middleware('AdminLogin:sanctum')->group(function () {
     Route::Post('store_n_game/{value}', [App\Http\Controllers\NGameController::class, 'store_n_game']);
     Route::post('update_photo_voice_n_Game/{n_course}', [App\Http\Controllers\NGameController::class, 'update_photo_voice_n_Game']);
 });
+
+
+
+Route::get('feedbacks',[App\Http\Controllers\FeedBackController::class,'getallFeedBacks'])
+// ->middleware('AdminLogin:sanctum');
+;
+

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Authcontroller\Basecontroller as BaseController;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use App\Http\Resources\Section as SectionResourse;
 
 class SectionController extends BaseController
@@ -55,6 +56,9 @@ class SectionController extends BaseController
                 $filedata = file_get_contents($request->section_image);
                 $mimetype = $file->getMimeType();
                 $section->name_section = $request->name_section;
+               
+                $section->slug = $request->slug;
+
                 $section->photo_type = $mimetype;
                 $section->section_image = $filedata;
                 $section->save();

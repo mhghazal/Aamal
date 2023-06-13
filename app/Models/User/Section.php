@@ -11,14 +11,17 @@ class Section extends Model
     protected $table = 'sections';
     protected $fillable = [
         'name_section',
+        'slug',
         'section_image'
     ];
-    public function course()
+
+    public function games()
     {
-        return $this->hasOne(course::class);
+        return $this->hasMany(Game::class);
     }
-    public function game()
+
+    public function courses()
     {
-        return $this->hasOne(Game::class);
+        return $this->hasMany(Course::class);
     }
 }

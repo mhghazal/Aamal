@@ -28,16 +28,8 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        $frontEndUrl = env('FRONTEND_URL');
-        $this->setFrontEndUrlInResetPasswordEmail($frontEndUrl);
+       
     }
 
-    protected function setFrontEndUrlInResetPasswordEmail($frontEndUrl = '')
-    {
-        // update url in ResetPassword Email to frontend url
-        ResetPassword::createUrlUsing(function ($user, string $token) use ($frontEndUrl) {
-            return $frontEndUrl . '/auth/password/email/reset?token=' . $token;
-        });
-    }
     }
 

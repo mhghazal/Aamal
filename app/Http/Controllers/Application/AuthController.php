@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Authcontroller;
+namespace App\Http\Controllers\Application;
 
 use App\Http\Controllers\Authcontroller\Basecontroller as Basecontroller;
 use App\Mail\SendCodeResetPassword;
@@ -15,30 +15,38 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Passport\HasApiTokens;
 
-class Authentication extends Basecontroller
+class AuthController extends Basecontroller
 {
     use HasApiTokens;
+
+    public function __construct()
+    {
+        $this->middleware('auth:sanctum', ['except'
+        => ['login', 'register','ForgotPassword','CodeCheck','Reset']
+        ]);
+        // $this->guard = "api";
+    }
     public function register(Request $request)
     {
 
         DB::beginTransaction();
         try {
             $validator = Validator::make($request->all(), [
-                'name' => 'required |unique:users',
-                'email' => 'required|unique:users',
+                'name' => 'required',
+                'email' => 'email||unique:users',
                 'password' => 'required',
                 'c_password' => 'required|same:password',
             ]);
             if ($validator->fails()) {
-                return $this->senderror($validator->errors(), 'please validate error');
+                return $this->senderror($validator->errors(), 'Validation Error');
             }
             $input = $request->all();
             $input['password'] = Hash::make($input['password']);
             $user = User::create($input);
-            $success['token'] = $user->createToken('ahmadghazal')->plainTextToken;
+            $success['token'] = $user->createToken('token')->plainTextToken;
             $success['name'] = $user->name;
             DB::commit();
-            return $this->sendresponse($success, 'user register successfly');
+            return $this->sendresponse($success, 'User Register Successfly');
         } catch (\Exception $e) {
             DB::rollback();
             return $this->senderror($validator->errors(), 'please validate error');
@@ -46,43 +54,52 @@ class Authentication extends Basecontroller
     }
     public function login(Request $request)
     {
-        $request->validate([
-            'email' => 'required',
+
+        $validator = Validator::make($request->all(), [
+            'email' => 'email|required',
             'password' => 'required|string',
         ]);
+        if ($validator->fails()) {
+            return $this->senderror($validator->errors(), 'Validation Error');
+        }
         $credentials = request(['email', 'password']);
         if (!Auth::attempt($credentials)) {
-            return $this->senderror('Unauthorized', ['error', 'Unauthorized']);
+            return $this->senderror('Unauthorized', ['Unauthorized']);
         }
         $users = $request->user();
-        $success['token'] = $users->createToken('ahmadghazal')->plainTextToken;
+        $success['token'] = $users->createToken('token')->plainTextToken;
         $success['name'] = $users->name;
-        return $this->sendresponse($success, 'user login successfly');
+        return $this->sendresponse($success, 'User Login Successfly');
     }
     public function logout(Request $request)
     {
+
+       $user = auth::user()->name;
         $request->user()->currentAccessToken()->delete();
-        return $this->sendresponse(['message' => 'user logout successfly'], 200);
+        // auth::logout();
+        return $this->sendresponse(['message' => 'User Logout Successfly',
+                                    'user' => $user,
+                                     ], 200);
     }
     public function delete(Request $request)
     {
         $user = Auth::user();
         $request->user()->delete();
-        $user->profile->delete();
+        // $user->profile->delete();
         return $this->sendresponse(['message' => 'user delete successfly'], 200);
     }
 
     /*
      * Get authenticated user details
      */
-    public function getAuthenticatedUser(Request $request)
+    public function userinfo(Request $request)
     {
         return $request->user();
     }
 
     public function ForgotPassword(Request $request)
     {
-        
+
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|exists:users',
         ]);
@@ -146,7 +163,7 @@ class Authentication extends Basecontroller
 
         $user->password = Hash::make($request->password);
         $user->save();
-        
+
         $passwordReset->delete();
 
         return response(['message' => 'password has been successfully reset'], 200);

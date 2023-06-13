@@ -21,8 +21,8 @@ class N_Course extends JsonResource
             'course_id' => $this->course_id,
             'n_image' => $getfile = "data:" . $this->photo_type . ";base64," . base64_encode($this->n_image),
             'voice' => $getfile = "data:" . $this->voice_type . ";base64," . base64_encode($this->voice),
-            'created_at' => $this->created_at->format('D/M/Y'),
-            'updated_at' => $this->updated_at->format('D/M/Y'),
+            // 'created_at' => $this->created_at->format('D/M/Y'),
+            // 'updated_at' => $this->updated_at->format('D/M/Y'),
         ];
     }
 }

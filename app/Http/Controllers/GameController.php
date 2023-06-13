@@ -61,6 +61,7 @@ class GameController extends BaseController
                 $mimetype = $file->getMimeType();
                 $game->section_id =  $section->id;
                 $game->name_game = $request->name_game;
+                $game->slug = $request->slug;
                 $game->photo_type = $mimetype;
                 $game->game_image = $filedata;
                 $game->save();

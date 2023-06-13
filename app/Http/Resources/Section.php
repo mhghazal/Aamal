@@ -17,10 +17,12 @@ class Section extends JsonResource
         // return parent::toArray($request);
         return [
             'id' => $this->id,
-            'name_section' => $this->name_section,
-            'section_image' => $getfile = "data:" . $this->photo_type . ";base64," . base64_encode($this->section_image),
-            'created_at' => $this->created_at->format('D/M/Y'),
-            'updated_at' => $this->updated_at->format('D/M/Y'),
+            'section_name' => $this->name_section,
+            'slug' =>$this->slug,
+            'photo_type'    =>$this->photo_type,
+            'photo' => $getfile = "data:" . $this->photo_type . ";base64," . base64_encode($this->section_image),
+            // 'created_at' => $this->created_at->format('D/M/Y'),
+            // 'updated_at' => $this->updated_at->format('D/M/Y'),
         ];
     }
 }
