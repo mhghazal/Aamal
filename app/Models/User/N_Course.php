@@ -11,12 +11,13 @@ class N_Course extends Model
     protected $table = 'n__courses';
     protected $fillable = [
         'name_image',
-        'course_id',
+        'nameA',
+        'activity_id',
         'n_image',
         'voice'
     ];
-    public function course()
+    public function activities()
     {
-        return $this->belongsToMany(Course::class);
+        return $this->belongsToMany(Activity::class);
     }
 }

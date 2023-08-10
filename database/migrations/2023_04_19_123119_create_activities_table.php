@@ -14,15 +14,17 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('courses', function (Blueprint $table) {
+        Schema::create('activities', function (Blueprint $table) {
             $table->id();
-            $table->string('name_course');
+            $table->string('NameE');
+            $table->string('NameA');
+            $table->integer('level_activity');
             $table->unsignedBigInteger('section_id')->nullable();
             $table->foreign('section_id')->references('id')->on('sections')->onDelete('cascade');
-            $table->string('photo_type')->nullable();
             $table->timestamps();
+            $table->string('photo_type')->nullable();
         });
-        DB::statement("ALTER TABLE `courses`ADD course_image LONGBLOB");
+        DB::statement("ALTER TABLE `activities`ADD activity_image LONGBLOB");
     }
 
     /**
@@ -32,6 +34,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('courses');
+        Schema::dropIfExists('activities');
     }
 };

@@ -17,8 +17,8 @@ return new class extends Migration
         Schema::create('n__courses', function (Blueprint $table) {
             $table->id();
             $table->string('name_image');
-            $table->unsignedBigInteger('course_id')->nullable();
-            $table->foreign('course_id')->references('id')->on('courses')->onDelete('cascade');
+            $table->unsignedBigInteger('activity_id')->nullable();
+            $table->foreign('activity_id')->references('id')->on('activities')->onDelete('cascade');
             $table->string('photo_type')->nullable();
             $table->string('voice_type')->nullable();
             $table->timestamps();

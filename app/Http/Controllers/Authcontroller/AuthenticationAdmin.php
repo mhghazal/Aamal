@@ -24,7 +24,7 @@ class AuthenticationAdmin extends Basecontroller
                 'name' => 'required |unique:users',
                 'email' => 'required|unique:users',
                 'password' => 'required',
-                'c_password' => 'required|same:password',
+                // 'c_password' => 'required|same:password',
             ]);
             if ($validator->fails()) {
                 return $this->senderror($validator->errors(), 'please validate error');

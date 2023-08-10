@@ -2,6 +2,7 @@
 namespace App\Services;
 
 use App\Http\Controllers\Authcontroller\Basecontroller;
+use App\Http\Resources\Activity;
 use App\Models\User\Section;
 use App\Http\Resources\Section as SectionResourse;
 use App\Models\User\Course;
@@ -17,7 +18,6 @@ class SectionService extends Basecontroller
         try {
             $sections = Section::all();
             $length = $sections->count();
-
             return response()->json([
                 'Count of Sections' => $length,
                 'Sections' => SectionResourse::collection($sections),
@@ -28,31 +28,22 @@ class SectionService extends Basecontroller
         }
     }
 
-    public function SectionBody($name)
+    public function SectionBody($sectionName)
     {
-        $section = Section::where('name_section', $name)->first();
-
+        $section = Section::where('name_section', $sectionName)->first();
         if (!$section) {
             return response()->json([
-                'message' => "Section not found with name '{$name}'.",
+                'message' => "Section not found with name '{$sectionName}'.",
             ], 404);
         }
-
-        $games = $section->games;
-        $courses = $section->courses;
-
+        $activities = $section->activities;
         $response = [
-            'Section Name' => $name,
-            'Games' => [
-                'Count' => $games->count(),
-                'List' => GameResourse::collection($games),
-            ],
+            'Section Name' => $sectionName,
             'Courses' => [
-                'Count' => $courses->count(),
-                'List' => CourseResourse::collection($courses),
+                'Count' => $activities->count(),
+                'List' => Activity::collection($activities),
             ],
         ];
-
         return response()->json($response);
     }
 }

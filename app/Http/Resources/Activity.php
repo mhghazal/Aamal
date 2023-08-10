@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class N_Game extends JsonResource
+class Activity extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,10 +17,11 @@ class N_Game extends JsonResource
         //return parent::toArray($request);
         return [
             'id' => $this->id,
-            'name_image' => $this->name_image,
-            'course_id' => $this->course_id,
-            'n_image' => $getfile = "data:" . $this->photo_type . ";base64," . base64_encode($this->n_image),
-            'voice' => $getfile = "data:" . $this->voice_type . ";base64," . base64_encode($this->voice),
+            'NameA' => $this->NameA,
+            'NameE' => $this->NameE,
+            'section_id' => $this->section_id,
+            'level_activity' => $this->level_activity,
+            'activity_image' => $getfile = "data:" . $this->photo_type . ";base64," . base64_encode($this->activity_image),
             'created_at' => $this->created_at->format('D/M/Y'),
             'updated_at' => $this->updated_at->format('D/M/Y'),
         ];

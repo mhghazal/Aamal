@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User\Section;
+use App\Models\User\Activity;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Authcontroller\Basecontroller as BaseController;
 use Illuminate\Support\Facades\Validator;
-use App\Http\Resources\Section as SectionResourse;
+use App\Http\Resources\Activity as ActivityResourse;
 
-class SectionController extends BaseController
+class ActivityController extends BaseController
 {
     /**
      * Display a listing of the resource.
@@ -18,13 +18,18 @@ class SectionController extends BaseController
      */
     public function index()
     {
+        //
+    }
+
+    public function get_activity($id)
+    {
         $admin = Auth::user();
         if ($admin->type == 'admin') {
             try {
-                $section = Section::all();
-                return $this->sendresponse(SectionResourse::collection($section), 'all sections');
+                $activity = Activity::where('section_id', $id)->get();
+                return $this->sendresponse(ActivityResourse::collection($activity), 'private activity');
             } catch (\Exception $e) {
-                return $this->senderror($e, 'the section not found');
+                return $this->senderror($e, 'the activity not found');
             }
         } else {
             return $this->senderror(false, 'the Auth is not Admin', 404);
@@ -55,27 +60,31 @@ class SectionController extends BaseController
                 $validator = Validator::make($request->all(), [
                     'NameE' => 'required',
                     'NameA' => 'required',
+                    'level_activity' => 'required',
+                    'section_id' => 'required',
                     'pic' => 'required|mimes:pdf,docx,txt,jpg,png|max:2048|nullable'
                 ]);
                 if ($validator->fails()) {
-                    return $this->senderror($validator->errors(), 'please validate error');
+                    return $this->senderror($validator->errors(), 'please validate error00');
                 }
                 if ($request->has('pic')) {
-                    $section = new Section;
+                    $activity = new Activity;
                     $file = $request->file('pic');
                     $filedata = file_get_contents($request->pic);
                     $mimetype = $file->getMimeType();
-                    $section->name_section = $request->NameA;
-                    $section->slug = $request->NameE;
-                    $section->photo_type = $mimetype;
-                    $section->section_image = $filedata;
-                    $section->save();
-                    return $this->sendresponse(new SectionResourse($section), 'Store Section sucssesful');
+                    $activity->NameA = $request->NameA;
+                    $activity->NameE = $request->NameE;
+                    $activity->level_activity = $request->level_activity;
+                    $activity->section_id = $request->section_id;
+                    $activity->photo_type = $mimetype;
+                    $activity->activity_image = $filedata;
+                    $activity->save();
+                    return $this->sendresponse(new ActivityResourse($activity), 'Store Activity sucssesful');
                 } else {
-                    return $this->senderror('please validate error-->Section not Storing');
+                    return $this->senderror('please validate error-->Activity not Storing');
                 }
             } catch (\Exception $e) {
-                return $this->senderror($e, 'please validate error-->Section not Storing');
+                return $this->senderror($e, 'please validate error--->Activity not Storing');
             }
         } else {
             return $this->senderror(false, 'the Auth is not Admin', 404);
@@ -85,19 +94,18 @@ class SectionController extends BaseController
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\User\Section  $section
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Section $section)
+    public function show(Activity $activity)
     {
         $admin = Auth::user();
         if ($admin->type == 'admin') {
             try {
-                $section = Section::find($section);
-                // dd($section);
-                return $this->sendresponse(SectionResourse::collection($section), 'show specified sections');
+                $activity = Activity::find($activity);
+                return $this->sendresponse(ActivityResourse::collection($activity), 'show specified activity');
             } catch (\Exception $e) {
-                return $this->senderror($e, 'the section not found');
+                return $this->senderror($e, 'the activity not found');
             }
         } else {
             return $this->senderror(false, 'the Auth is not Admin', 404);
@@ -107,10 +115,10 @@ class SectionController extends BaseController
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\User\Section  $section
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Section $section)
+    public function edit($id)
     {
         //
     }
@@ -119,10 +127,10 @@ class SectionController extends BaseController
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\User\Section  $section
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Section $section)
+    public function update(Request $request, Activity $activity)
     {
         $admin = Auth::user();
         if ($admin->type == 'admin') {
@@ -134,18 +142,19 @@ class SectionController extends BaseController
                 if ($validator->fails()) {
                     return $this->senderror($validator->errors(), 'please validate error');
                 }
-                $section->name_section = $request->NameA;
-                $section->slug = $request->NameE;
-                $section->save();
-                return $this->sendresponse(['message' => 'section update name successfly'], 200);
+                $activity->NameA = $request->NameA;
+                $activity->NameE = $request->NameE;
+                $activity->save();
+                return $this->sendresponse(['message' => 'activity update name successfly'], 200);
             } catch (\Exception $e) {
-                return $this->senderror($e, 'please validate error-->Section not Storing');
+                return $this->senderror($e, 'please validate error-->activity not Storing');
             }
         } else {
             return $this->senderror(false, 'the Auth is not Admin', 404);
         }
     }
-    public function update_photo_section(Request $request, Section $section)
+
+    public function update_photo_activity(Request $request, Activity $activity)
     {
         $admin = Auth::user();
         if ($admin->type == 'admin') {
@@ -157,36 +166,35 @@ class SectionController extends BaseController
                     $file = $request->file('pic');
                     $filedata = file_get_contents($request->pic);
                     $mimetype = $file->getMimeType();
-                    $section->photo_type = $mimetype;
-                    $section->section_image = $filedata;
-                    $section->save();
-                    return $this->sendresponse($section->name_section, 'section update photo successfly');
+                    $activity->photo_type = $mimetype;
+                    $activity->activity_image = $filedata;
+                    $activity->save();
+                    return $this->sendresponse($activity->NameE, 'Activity update photo successfly');
                 } else {
-                    return $this->senderror('please validate error-->Section photo not Storing');
+                    return $this->senderror('please validate error-->Activity photo not Storing');
                 }
             } catch (\Exception $e) {
-                return $this->senderror($e, 'please validate error-->Section photo not Storing');
+                return $this->senderror($e, 'please validate error-->Activity photo not Storing');
             }
         } else {
             return $this->senderror(false, 'the Auth is not Admin', 404);
         }
     }
-
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\User\Section  $section
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Section $section)
+    public function destroy(Activity $activity)
     {
         $admin = Auth::user();
         if ($admin->type == 'admin') {
             try {
                 //$section->course()->get(['id'])->each->delete();
                 //$section->game()->get(['id'])->each->delete();
-                $section->delete();
-                return $this->sendresponse(['message' => 'section delete successfly'], 200);
+                $activity->delete();
+                return $this->sendresponse(['message' => 'activity delete successfly'], 200);
             } catch (\Exception $e) {
                 return $this->senderror($e, 'please delete error');
             }

@@ -31,34 +31,30 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('profile', App\Http\Controllers\ProfileController::class);
     Route::post('update_photo_profile/{profile}', [App\Http\Controllers\ProfileController::class, 'update_photo_profile']);
 });
-Route::middleware('AdminLogin:sanctum')->group(function () {
+
+Route::middleware('auth:sanctum')->group(function () {
     Route::resource('section', App\Http\Controllers\SectionController::class);
     Route::post('update_photo_section/{section}', [App\Http\Controllers\SectionController::class, 'update_photo_section']);
 });
-Route::middleware('AdminLogin:sanctum')->group(function () {
-    Route::resource('course', App\Http\Controllers\CourseController::class);
-    Route::Post('store_course/{value}', [App\Http\Controllers\CourseController::class, 'store_course']);
-    Route::post('update_photo_course/{course}', [App\Http\Controllers\CourseController::class, 'update_photo_course']);
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::resource('activity', App\Http\Controllers\ActivityController::class);
+    Route::get('get_activity/{id}', [App\Http\Controllers\ActivityController::class, 'get_activity']);
+    Route::post('update_photo_activity/{activity}', [App\Http\Controllers\ActivityController::class, 'update_photo_activity']);
 });
-Route::middleware('AdminLogin:sanctum')->group(function () {
-    Route::resource('game', App\Http\Controllers\GameController::class);
-    Route::post('store_game/{value}', [App\Http\Controllers\GameController::class, 'store_game']);
-    Route::post('update_photo_game/{game}', [App\Http\Controllers\GameController::class, 'update_photo_game']);
-});
-Route::middleware('AdminLogin:sanctum')->group(function () {
+
+Route::middleware('auth:sanctum')->group(function () {
     Route::resource('n_course', App\Http\Controllers\NCourseController::class);
-    Route::Post('store_n_course/{value}', [App\Http\Controllers\NCourseController::class, 'store_n_course']);
+    Route::get('get_n_course/{id}', [App\Http\Controllers\NCourseController::class, 'get_n_course']);
+    // Route::Post('store_n_course/{value}', [App\Http\Controllers\NCourseController::class, 'store_n_course']);
     Route::post('update_photo_voice_n_Course/{n_course}', [App\Http\Controllers\NCourseController::class, 'update_photo_voice_n_Course']);
 });
-Route::middleware('AdminLogin:sanctum')->group(function () {
-    Route::resource('n_game', App\Http\Controllers\NGameController::class);
-    Route::Post('store_n_game/{value}', [App\Http\Controllers\NGameController::class, 'store_n_game']);
-    Route::post('update_photo_voice_n_Game/{n_course}', [App\Http\Controllers\NGameController::class, 'update_photo_voice_n_Game']);
-});
+Route::middleware('auth:sanctum')->group(
+    function () {
+        Route::post('store', [App\Http\Controllers\Application\NeedController::class, 'store']);
+    }
+);
 
-
-
-Route::get('feedbacks',[App\Http\Controllers\FeedBackController::class,'getallFeedBacks'])
-// ->middleware('AdminLogin:sanctum');
+Route::get('feedbacks', [App\Http\Controllers\FeedBackController::class, 'getallFeedBacks'])
+    // ->middleware('AdminLogin:sanctum');
 ;
-

@@ -5,20 +5,32 @@ namespace App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Course extends Model
+class Activity extends Model
 {
     use HasFactory;
-    protected $table = 'courses';
+    protected $table = 'activities';
     protected $fillable = [
-        'name_course',
-        'slug',
-        'course_image',
-        'section_id'
+        'NameE',
+        'NameA',
+        'level_activity',
+        'section_id',
+        'activity_image'
     ];
+
     public function section()
     {
         return $this->belongsToMany(Section::class);
     }
+    public function games()
+    {
+        return $this->hasMany(Game::class);
+    }
+
+    public function courses()
+    {
+        return $this->hasMany(Course::class);
+    }
+
     public function n_course()
     {
         return $this->hasOne(N_Course::class);

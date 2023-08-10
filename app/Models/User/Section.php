@@ -2,6 +2,7 @@
 
 namespace App\Models\User;
 
+use App\Models\Photo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -10,18 +11,19 @@ class Section extends Model
     use HasFactory;
     protected $table = 'sections';
     protected $fillable = [
-        'name_section',
-        'slug',
+        'NameE',
+        'NameA',
         'section_image'
     ];
-
-    public function games()
+    public function activities()
     {
-        return $this->hasMany(Game::class);
+        return $this->hasMany(Activity::class);
     }
 
-    public function courses()
+
+
+    public function photos()
     {
-        return $this->hasMany(Course::class);
+        return $this->hasManyThrough(N_Course::class,Activity::class);
     }
 }

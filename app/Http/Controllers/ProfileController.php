@@ -23,9 +23,10 @@ class ProfileController extends BaseController
         $user = Auth::user();
         $id = Auth::id();
         if ($user->profile == null) {
+            $s = random_int(1, 200);
             Profile::create([
                 'user_id' => $id,
-                'phone' => 'Ex: 0997647907',
+                'phone' => "Ex$s: 099764797",
                 'gender' => 'Ex: mail ',
                 'date_of_birth' => '2023-5-8',
                 'location' => 'Ex: Syria',

@@ -5,11 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Photo extends Model
+class Need extends Model
 {
     use HasFactory;
-    protected $fillable = [
+
+    public $fillable = [
         'name',
-        'img'
+        'slug',
+        'user_id',
+        'type',
+        'image',
+        'voice'
     ];
 }

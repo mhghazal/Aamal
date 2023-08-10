@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Application;
 
 use App\Http\Controllers\Authcontroller\Basecontroller;
+use App\Http\Resources\Activity as ResourcesActivity;
 use App\Http\Resources\Application\ProfileResources;
 use App\Http\Resources\Course as CourseResourse;
 use App\Http\Resources\Game as GameResourse;
@@ -10,10 +11,12 @@ use App\Http\Resources\N_Course as ResourcesN_Course;
 use App\Http\Resources\N_Game as ResourcesN_Game;
 use App\Models\FeedBack;
 use App\Models\User;
+use App\Models\User\Activity;
 use App\Models\User\Course;
 use App\Models\User\Game;
 use App\Models\User\N_Course;
 use App\Models\User\N_Game;
+use App\Models\User\Section;
 use App\Services\SectionService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -35,31 +38,18 @@ class MainController extends Basecontroller
         return $section->getAllSections();
     }
 
-    public function Courses()
+    public function Activities()
     {
         try {
-            $Courses = Course::all();
+            $Activities = Activity::all();
             return $this->sendresponse(
-                CourseResourse::collection($Courses), 'All Courses'
+                ResourcesActivity::collection($Activities), 'All Courses'
             );
         } catch (\Exception $e) {
             return $this->senderror($e, 'The Courses Not found');
         }
     }
 
-    public function Games()
-    {
-        try {
-            $Games = Game::all();
-            return $this->sendresponse(
-                GameResourse::collection($Games), 'All Games'
-            );
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => $e->getMessage(),
-            ]);
-        }
-    }
 
     public function Profile()
     {
@@ -75,9 +65,9 @@ class MainController extends Basecontroller
         }
     }
 
-    public function SectionBody($name, SectionService $body)
+    public function SectionBody($sectionName, SectionService $body)
     {
-        return $body->SectionBody($name);
+        return $body->SectionBody($sectionName);
     }
 
     public function feedback(Request $request)
@@ -110,7 +100,7 @@ class MainController extends Basecontroller
     public function ChooseCourse($id)
     {
         $courses = N_Course::where('id', $id)->get();
-          if ($courses->isEmpty()) {
+        if ($courses->isEmpty()) {
             return response()->json([
                 'message' => 'Course not found',
             ]);
@@ -121,21 +111,19 @@ class MainController extends Basecontroller
 
     }
 
-    public function ChooseGame($id)
+
+    public function selectCourse($sectionId, $ActivityId)
     {
-        $game = N_Game::find($id);
+        $section = Section::find($sectionId);
+        $Activity = Activity::find($ActivityId);
+        $photos = $section->photos()->where('activity_id', $ActivityId)->get();
+
         return response()->json([
-            'game' => ResourcesN_Game::collection($game),
+            'section'=>$section->name_section,
+            'course'=>$Activity->NameE,
+            'Count' => $photos->count(),
+            'List' => ResourcesN_Course::collection($photos),
         ]);
-    }
-
-    public function ResponseGame(Request $request)
-    {
-
-    }
-
-    public function ResponseCourse(Request $request)
-    {
 
     }
 

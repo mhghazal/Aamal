@@ -20,19 +20,15 @@ return new class extends Migration
             }
         });
 
-        Schema::table('courses', function (Blueprint $table) {
+        Schema::table('n__courses', function (Blueprint $table) {
             // Check if the column exists before attempting to add it
-            if (!Schema::hasColumn('courses', 'slug')) {
-                $table->string('slug')->after('name_course');
+            if (!Schema::hasColumn('n__courses', 'nameA')) {
+                $table->string('nameA')->after('name_image');
             }
         });
 
-        Schema::table('games', function (Blueprint $table) {
-            // Check if the column exists before attempting to add it
-            if (!Schema::hasColumn('games', 'slug')) {
-                $table->string('slug')->after('name_game');
-            }
-        });
+
+
     }
 
     /**

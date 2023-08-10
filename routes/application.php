@@ -19,18 +19,32 @@ Route::group(['prefix' => 'Auth',], function () {
 });
 
     Route::get('sections',[App\Http\Controllers\Application\MainController::class,'Sections']);
-    Route::get('courses',[App\Http\Controllers\Application\MainController::class,'Courses']);
-    Route::get('games',[App\Http\Controllers\Application\MainController::class,'Games']);
+    Route::get('Activities',[App\Http\Controllers\Application\MainController::class,'Courses']);
     Route::get('profile',[App\Http\Controllers\Application\MainController::class,'Profile']);
 
     route::get('SectionBody/{name}',[App\Http\Controllers\Application\MainController::class,'SectionBody']);
     route::post('feedback',[App\Http\Controllers\Application\MainController::class,'feedback']);
 
     route::get('chooseCourse/{id}',[App\Http\Controllers\Application\MainController::class,'ChooseCourse']);
-    route::get('chooseGame/{id}',[App\Http\Controllers\Application\MainController::class,'ChooseGame']);
 
-    route::post('ResponseGame',[App\Http\Controllers\Application\MainController::class,'ResponseGame']);
-    route::post('ResponseCourse',[App\Http\Controllers\Application\MainController::class,'ResponseCourse']);
+    // need
+    route::post('need',[App\Http\Controllers\Application\NeedController::class,'store']);
+    route::post('wanting',[App\Http\Controllers\Application\NeedController::class,'store_need']);
+    route::get('index_need/{value}',[App\Http\Controllers\Application\NeedController::class,'index']);
+
+    // select course to return all media have it
+    route::get('select/{id}/{ids}',[App\Http\Controllers\Application\MainController::class,'selectCourse']);
+
+    // for progress
+    Route::post('/recordProgress',[App\Http\Controllers\Application\UserProgrssController::class,'recordProgress']);
+    Route::get('/retrieveProgress',[App\Http\Controllers\Application\UserProgrssController::class,'retrieveProgress']);
+
+    // for store result
+
+    Route::post('/results', [App\Http\Controllers\Application\ResultController::class,'store']);
+
+
+
 
 
 
@@ -41,14 +55,3 @@ Route::group(['prefix' => 'Auth',], function () {
         return "online";
     });
 
-
-   
-
-
-
-
-
-// Route::get('/imge',[App\Http\Controllers\CourseController::class,'index']);
-Route::get('/tt',[App\Http\Controllers\ImageUploadController::class,'mcd']);
-
-// Application/ProfileResources
